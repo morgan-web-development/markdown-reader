@@ -34,6 +34,38 @@ npm run dist
 
 This compiles the app and creates an NSIS installer under `release/`. Run the generated `.exe` to install Markdown Reader on your machine.
 
+## Marketing website (Cloudflare Pages)
+
+The site lives in [`website/`](website/). It includes SEO metadata and a `/download` endpoint that redirects to the latest Windows installer on GitHub Releases.
+
+### Deploy on Cloudflare Pages
+
+1. Push the `website/` folder to GitHub (already in this repo).
+2. In Cloudflare: **Workers & Pages → Create → Pages → Connect to Git**.
+3. Select the `markdown-reader` repo.
+4. Set:
+   - **Framework preset:** None
+   - **Build command:** leave empty
+   - **Build output directory:** `website`
+5. Deploy.
+
+Production domain: **https://easymarkdownreader.com**
+
+Canonical / Open Graph / sitemap URLs are already set to that domain.
+
+### Download button
+
+`/download` is a Cloudflare Pages Function (`functions/download.js` at the repo root). It calls the GitHub Releases API for `latest` and redirects to the Windows `.exe` asset.
+
+## Release a new version
+
+1. Bump `version` in `package.json`
+2. `npm run dist`
+3. `git tag vX.Y.Z && git push origin vX.Y.Z`
+4. `gh release create vX.Y.Z "release/Markdown Reader Setup X.Y.Z.exe" --title "vX.Y.Z" --notes "..."`
+
+The website Download button will automatically pick up the new release.
+
 ## Scripts
 
 | Script        | Description                          |
