@@ -1,0 +1,7 @@
+name = "easymarkdownreader"
+compatibility_date = "2026-11-11"
+pages_build_output_dir = "website"
+
+[[analytics_engine_datasets]]
+binding = "DOWNLOADS"
+dataset = "markdown_reader_downloads"

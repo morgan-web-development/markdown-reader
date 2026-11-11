@@ -11,7 +11,26 @@ function pickInstaller(assets = []) {
   )
 }
 
-export async function onRequest() {
+function trackDownload(env, request, meta = {}) {
+  try {
+    env.DOWNLOADS?.writeDataPoint({
+      indexes: ['windows-installer'],
+      blobs: [
+        'download',
+        request.headers.get('cf-ipcountry') || 'XX',
+        meta.releaseTag || 'unknown',
+        meta.assetName || 'unknown'
+      ],
+      doubles: [1]
+    })
+  } catch {
+    // Tracking must never block the download redirect.
+  }
+}
+
+export async function onRequest(context) {
+  const { request, env } = context
+
   try {
     const response = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`, {
       headers: {
@@ -36,6 +55,11 @@ export async function onRequest() {
         headers: { 'Content-Type': 'text/plain; charset=utf-8' }
       })
     }
+
+    trackDownload(env, request, {
+      releaseTag: release.tag_name || 'unknown',
+      assetName: asset.name || 'unknown'
+    })
 
     return Response.redirect(asset.browser_download_url, 302)
   } catch (error) {

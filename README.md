@@ -57,6 +57,23 @@ Canonical / Open Graph / sitemap URLs are already set to that domain.
 
 `/download` is a Cloudflare Pages Function (`functions/download.js` at the repo root). It calls the GitHub Releases API for `latest` and redirects to the Windows `.exe` asset.
 
+### Download click tracking
+
+Each successful `/download` hit writes an Analytics Engine event to dataset `markdown_reader_downloads` (binding `DOWNLOADS`).
+
+Query recent downloads in Cloudflare → **Workers & Pages** → **Analytics Engine**, or via SQL API:
+
+```sql
+SELECT
+  blob2 AS country,
+  blob3 AS release_tag,
+  SUM(_sample_interval) AS downloads
+FROM markdown_reader_downloads
+WHERE timestamp > NOW() - INTERVAL '7' DAY
+GROUP BY country, release_tag
+ORDER BY downloads DESC
+```
+
 ## Release a new version
 
 1. Bump `version` in `package.json`
@@ -65,6 +82,18 @@ Canonical / Open Graph / sitemap URLs are already set to that domain.
 4. `gh release create vX.Y.Z "release/Markdown Reader Setup X.Y.Z.exe" --title "vX.Y.Z" --notes "..."`
 
 The website Download button will automatically pick up the new release.
+
+## Windows publisher / SmartScreen
+
+Installer metadata is set to **Morgan Web Development**, but Windows will still show **Unknown publisher** until the `.exe` is **code-signed** with an Authenticode certificate issued to that exact name.
+
+To sign builds:
+
+1. Buy a Windows code signing certificate (OV/Authenticode) from a CA such as DigiCert, Sectigo, or SSL.com — typically a hardware token / cloud HSM these days.
+2. Export or configure signing for electron-builder (`CSC_LINK` + `CSC_KEY_PASSWORD`, or HSM/Azure Trusted Signing).
+3. Set `win.signExecutable` back to signing-enabled and rebuild with `npm run dist`.
+
+Until then, users can click **More info → Run anyway** on SmartScreen.
 
 ## Scripts
 
