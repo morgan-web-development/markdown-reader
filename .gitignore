@@ -7,4 +7,11 @@ release
 Thumbs.db
 
 .wrangler
+.deploy-site
+website-payload.json
+deploy-files.json
+deploy-manifest.json
+deploy-result.json
+upload-result.json
+scripts/deploy-pages.mjs
 

@@ -1,5 +1,6 @@
 appId: com.markdownreader.app
 productName: Markdown Reader
+copyright: Copyright © Morgan Web Development
 directories:
   output: release
 files:
@@ -8,6 +9,7 @@ asar: true
 icon: build/icon.ico
 win:
   icon: build/icon.ico
+  publisherName: Morgan Web Development
   signExecutable: false
   target:
     - target: nsis

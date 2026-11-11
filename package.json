@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A simple Windows app for reading Markdown files",
   "main": "./out/main/index.js",
-  "author": "Markdown Reader",
+  "author": "Morgan Web Development",
   "license": "MIT",
   "scripts": {
     "postinstall": "node scripts/ensure-electron.mjs",
@@ -28,6 +28,7 @@
   "build": {
     "appId": "com.markdownreader.app",
     "productName": "Markdown Reader",
+    "copyright": "Copyright © Morgan Web Development",
     "directories": {
       "output": "release"
     },
@@ -38,6 +39,7 @@
     "icon": "build/icon.ico",
     "win": {
       "icon": "build/icon.ico",
+      "publisherName": "Morgan Web Development",
       "signExecutable": false,
       "target": [
         {
