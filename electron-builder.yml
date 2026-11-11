@@ -1,0 +1,23 @@
+appId: com.markdownreader.app
+productName: Markdown Reader
+directories:
+  output: release
+files:
+  - out/**/*
+asar: true
+icon: build/icon.ico
+win:
+  icon: build/icon.ico
+  signExecutable: false
+  target:
+    - target: nsis
+      arch:
+        - x64
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  installerIcon: build/icon.ico
+  uninstallerIcon: build/icon.ico
+  installerHeaderIcon: build/icon.ico
